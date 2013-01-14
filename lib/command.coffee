@@ -1,25 +1,30 @@
 runner = ->
 
+  fs         = require( 'fs' )
+  version    = JSON.parse( fs.readFileSync( __dirname + '/../package.json', 'utf-8' ) ).version
+
   livereload = require './livereload'
   resolve    = require('path').resolve
-  opts       = require 'opts'
 
-  opts.parse [
-    {
-      short: "p"
-      long:  "port"
-      description: "Specify the port"
-      value: true
-      required: false
-    }
-  ].reverse(), true
+  trim       = ( s )-> s.replace(/^\s+|\s+$/g, '')
+  list       = ( val )-> val.split( ',' ).map( ( d )-> trim( d ) )
+  
+  program    = require( 'commander' )
+  
+  
+  program
+    .version( version )
+    .option( '-p, --port <n>', 'Specify the port', parseInt )
+    .option( '-d, --delay <n>', 'Specify the delay to fire the refresh', parseInt )
+    .option( '-e, --exclusions <list>', 'Ignore specific files', list )
+    .parse( process.argv )
 
-  port = opts.get('port') || 35729
-
-  server = livereload.createServer({port: port, debug: true})
-
-  path = resolve(process.argv[2] || '.')
-
+  port = program.port || 35729
+  delay = program.delay || 0
+  exclusions = program.exclusions || []
+  server = livereload.createServer({port: port, debug: true, delay: delay, exclusions: exclusions })
+  
+  path = resolve( '.' )
   console.log('Starting LiveReload for ' + path)
 
   server.watch(path)

@@ -10,7 +10,7 @@ defaultPort = 35729
 
 defaultExts = [
   'html', 'css', 'js', 'png', 'gif', 'jpg',
-  'php', 'php5', 'py', 'rb', 'erb'
+  'php', 'php5', 'py', 'rb', 'erb', 'coffee', 'styl'
 ]
 
 defaultAlias =
@@ -27,14 +27,14 @@ merge = (obj1, obj2) ->
 class Server
   constructor: (@config) ->
     @config ?= {}
-
+    
     @config.version ?= version
     @config.port    ?= defaultPort
 
     @config.exts       ?= []
     @config.exclusions ?= []
     @config.alias      ?= {}
-
+    @config.delay      ?= 0
     @config.exts       = @config.exts.concat defaultExts
     @config.exclusions = @config.exclusions.concat defaultExclusions
     @config.alias      = merge( defaultAlias, @config.alias )
@@ -100,9 +100,15 @@ class Server
       apply_js_live: @config.applyJSLive,
       apply_css_live: @config.applyCSSLive
     ]
-
-    for socket in @sockets
-      socket.send data
+    if @delay is 0
+      for socket in @sockets
+        socket.send data
+    else
+      setTimeout =>
+        for socket in @sockets
+          socket.send data
+      , @delay
+        
 
   debug: (str) ->
     if @config.debug
