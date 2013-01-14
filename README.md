@@ -9,9 +9,9 @@ First, install the LiveReload browser plugins by visiting [http://help.livereloa
 
 To use livereload from the command line:
 
-    $ npm install -g livereload
-    $ livereload [path]
-
+    $ npm install -g git://github.com/mnmly/node-livereload.git
+    # Delay of 1000ms and ignore build.js and build.css, on port 3030
+    $ livereload -d 1000 -e build.js,build.css -p 3030
     
 
 Or to use the api within a project:
