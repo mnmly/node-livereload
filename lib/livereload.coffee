@@ -100,11 +100,13 @@ class Server
       apply_js_live: @config.applyJSLive,
       apply_css_live: @config.applyCSSLive
     ]
+    
     if @delay is 0
       for socket in @sockets
         socket.send data
     else
-      setTimeout =>
+      clearTimeout( @delayTimeout )
+      @delayTimeout = setTimeout =>
         for socket in @sockets
           socket.send data
       , @delay

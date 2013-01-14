@@ -22,6 +22,7 @@ runner = ->
   port = program.port || 35729
   delay = program.delay || 0
   exclusions = program.exclusions || []
+  console.log( delay )
   server = livereload.createServer({port: port, debug: true, delay: delay, exclusions: exclusions })
   
   path = resolve( '.' )
