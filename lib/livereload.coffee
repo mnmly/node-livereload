@@ -106,7 +106,6 @@ class Server
     else
       clearTimeout( @delayTimeout )
       @delayTimeout = setTimeout =>
-        console.log( 'emit' )
         for socket in @sockets
           socket.send data
       , @config.delay
