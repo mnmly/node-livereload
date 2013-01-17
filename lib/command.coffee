@@ -15,14 +15,14 @@ runner = ->
   program
     .version( version )
     .option( '-p, --port <n>', 'Specify the port', parseInt )
-    .option( '-d, --delay <n>', 'Specify the delay to fire the refresh', parseInt )
+    .option( '-i, --interval <n>', 'Specify the delay to fire the refresh', parseInt )
     .option( '-e, --exclusions <list>', 'Ignore specific files', list )
     .option( '-d, --dev', 'Output logs' )
     .parse( process.argv )
   
   debug = program.dev
   port = program.port || 35729
-  delay = program.delay || 0
+  delay = program.interval || 0
   exclusions = program.exclusions || []
   server = livereload.createServer({port: port, debug: debug, delay: delay, exclusions: exclusions })
   
