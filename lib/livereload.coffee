@@ -59,6 +59,10 @@ class Server
 
   onConnection: (socket) ->
     @debug "Browser connected."
+    socket.on 'error', (err) =>
+      @debug "Browser disconnected."
+      idx = @sockets.indexOf(socket)
+      @sockets.splice(idx, 1)
     socket.send "!!ver:#{@config.version}"
 
     socket.on 'message', (message) =>
